@@ -1,0 +1,121 @@
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('admin', 'user') DEFAULT 'user',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    product_id INT,
+    supplier_id INT,
+    quantity INT,
+    total_price DECIMAL(10,2),
+    status ENUM('Pending', 'Processing', 'Shipped', 'Delivered') DEFAULT 'Pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id),
+    FOREIGN KEY (supplier_id) REFERENCES suppliers(supplier_id)
+);
+
+// Create Order (create_order.php)
+<?php
+include '../includes/db_connect.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $user_id = $_POST['user_id'];
+    $product_id = $_POST['product_id'];
+    $supplier_id = $_POST['supplier_id'];
+    $quantity = $_POST['quantity'];
+    $total_price = $_POST['total_price'];
+
+    $sql = "INSERT INTO orders (user_id, product_id, supplier_id, quantity, total_price, status) VALUES (?, ?, ?, ?, ?, 'Pending')";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iiiid", $user_id, $product_id, $supplier_id, $quantity, $total_price);
+
+    if ($stmt->execute()) {
+        header("Location: ../pages/orders.php");
+        exit();
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+}
+?>
+
+// Read Orders (orders.php)
+<?php
+include '../includes/db_connect.php';
+$sql = "SELECT * FROM orders";
+$result = $conn->query($sql);
+?>
+<table>
+    <tr>
+        <th>Order ID</th>
+        <th>User ID</th>
+        <th>Product ID</th>
+        <th>Supplier ID</th>
+        <th>Quantity</th>
+        <th>Total Price</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    <?php while ($row = $result->fetch_assoc()) { ?>
+    <tr>
+        <td><?php echo $row['order_id']; ?></td>
+        <td><?php echo $row['user_id']; ?></td>
+        <td><?php echo $row['product_id']; ?></td>
+        <td><?php echo $row['supplier_id']; ?></td>
+        <td><?php echo $row['quantity']; ?></td>
+        <td><?php echo $row['total_price']; ?></td>
+        <td><?php echo $row['status']; ?></td>
+        <td>
+            <a href="../crud/update_order.php?id=<?php echo $row['order_id']; ?>">Edit</a>
+            <a href="../crud/delete_order.php?id=<?php echo $row['order_id']; ?>">Delete</a>
+        </td>
+    </tr>
+    <?php } ?>
+</table>
+
+// Update Order (update_order.php)
+<?php
+include '../includes/db_connect.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $order_id = $_POST['order_id'];
+    $status = $_POST['status'];
+
+    $sql = "UPDATE orders SET status = ? WHERE order_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $status, $order_id);
+
+    if ($stmt->execute()) {
+        header("Location: ../pages/orders.php");
+        exit();
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+}
+?>
+
+// Delete Order (delete_order.php)
+<?php
+include '../includes/db_connect.php';
+
+if (isset($_GET['id'])) {
+    $order_id = $_GET['id'];
+
+    $sql = "DELETE FROM orders WHERE order_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $order_id);
+
+    if ($stmt->execute()) {
+        header("Location: ../pages/orders.php");
+        exit();
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+}
+?>
