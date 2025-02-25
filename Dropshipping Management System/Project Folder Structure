@@ -1,0 +1,37 @@
+/dropshipping-management-system
+│── /assets
+│   ├── /css
+│   │   ├── styles.css
+│   ├── /js
+│   │   ├── script.js
+│   ├── /images
+│── /includes
+│   ├── db_connect.php
+│   ├── header.php
+│   ├── footer.php
+│   ├── navbar.php
+│── /pages
+│   ├── dashboard.php
+│   ├── orders.php
+│   ├── add_order.php
+│   ├── inventory.php
+│   ├── suppliers.php
+│   ├── analytics.php
+│   ├── profile.php
+│── /auth
+│   ├── login.php
+│   ├── register.php
+│   ├── logout.php
+│── /crud
+│   ├── create_order.php
+│   ├── update_order.php
+│   ├── delete_order.php
+│   ├── create_product.php
+│   ├── update_product.php
+│   ├── delete_product.php
+│── /database
+│   ├── init_db.sql
+│── index.php
+│── config.php
+│── .htaccess
+│── README.md
