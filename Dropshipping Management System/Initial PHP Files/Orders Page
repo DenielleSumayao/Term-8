@@ -1,0 +1,37 @@
+FILE NAME: orders.php
+
+<?php
+session_start();
+include '../includes/db_connect.php';
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../auth/login.php");
+    exit();
+}
+
+$sql = "SELECT * FROM orders";
+$result = $conn->query($sql);
+?>
+
+<h1>Orders</h1>
+<table>
+    <tr>
+        <th>Order ID</th>
+        <th>User ID</th>
+        <th>Product ID</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+    <?php while ($row = $result->fetch_assoc()) { ?>
+    <tr>
+        <td><?php echo $row['order_id']; ?></td>
+        <td><?php echo $row['user_id']; ?></td>
+        <td><?php echo $row['product_id']; ?></td>
+        <td><?php echo $row['status']; ?></td>
+        <td>
+            <a href="../crud/update_order.php?id=<?php echo $row['order_id']; ?>">Edit</a>
+            <a href="../crud/delete_order.php?id=<?php echo $row['order_id']; ?>">Delete</a>
+        </td>
+    </tr>
+    <?php } ?>
+</table>
