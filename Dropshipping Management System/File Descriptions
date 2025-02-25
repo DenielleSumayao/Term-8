@@ -1,0 +1,21 @@
+FILE DESCRIPTIONS
+• /assets/css/styles.css → Styles for the UI.
+• /assets/js/script.js → JavaScript for interactivity.
+• /includes/db_connect.php → Database connection file.
+• /includes/header.php → Header section.
+• /includes/footer.php → Footer section.
+• /includes/navbar.php → Navigation bar.
+• /auth/login.php → User login page.
+• /auth/register.php → User registration page.
+• /auth/logout.php → Destroys session and logs out user.
+• /pages/dashboard.php → Main admin panel.
+• /pages/orders.php → Manage orders (View, Update, Delete).
+• /pages/add_order.php → Create new orders.
+• /pages/inventory.php → Manage product inventory.
+• /pages/suppliers.php → Supplier management.
+• /pages/analytics.php → Profit margin and sales tracking.
+• /pages/profile.php → User profile and settings.
+• /crud/ → Contains PHP scripts for CRUD operations.
+• /database/init_db.sql → SQL script to set up the database.
+• /config.php → Configuration file for global settings.
+• /index.php → Homepage.
